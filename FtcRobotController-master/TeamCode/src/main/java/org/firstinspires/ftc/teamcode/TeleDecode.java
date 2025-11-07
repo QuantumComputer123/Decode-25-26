@@ -143,6 +143,8 @@ public class TeleDecode extends LinearOpMode {
             //add gameplay functions
             processIntake();
             processShooter();
+            processTurntable();
+            processKicker();
 
             // Compute current cycle time
             nanoTimePrev = nanoTimeCurr;
@@ -453,7 +455,7 @@ public class TeleDecode extends LinearOpMode {
             gamepad1.runRumbleEffect(shortRumble);
             gamepad2.runRumbleEffect(shortRumble);
         }
-    }
+    } //encoderReset
     void processIntake(){
         if (gamepad1.right_trigger >= 0.05) {
             robot.intakeMotor.setPower(gamepad1.right_trigger * 1.5); //forward
@@ -470,9 +472,60 @@ public class TeleDecode extends LinearOpMode {
         } else if(gamepad1_circle_now){
             robot.pigChucker.setPower(0);
         }
-    }
+    } //processShooter
 
     void processTurntable(){
+        // we are going to need 6 positions for the turntable, and they can just run sequentially
+        //one for intake and one for shooting thus they will be 1i,2i,3i, and then 1s,2s,3s
+        if(gamepad1_r_bumper_now && !gamepad1_r_bumper_last){ //right bumper to intake
+            if (robot.turntableSlot >= 3){
+                robot.turntableSlot = 1;
+            } else {
+                robot.turntableSlot += 1;
+            }
+        } else if (gamepad1_l_bumper_now && !gamepad1_l_bumper_last){ //control shooting turntable with left bumper
+            if (robot.turntableSlot <= 3) {
+                robot.turntableSlot = 4;
+            } else if (robot.turntableSlot <= 5) {
+                robot.turntableSlot += 1;
+            } else {
+                robot.turntableSlot = 4;
+            }
+        }
 
+        //process turntable pos
+        /* 1 2 3 intake, 4 5 6 shooting
+        1i = 4o
+        2i = 5o
+        3i = 6o
+        */
+        if(robot.turntableSlot == 1){ //TODO: fill out all turntable positions with accurate doubles
+            robot.turntablePos = 0;
+        } else if (robot.turntableSlot == 2){
+            robot.turntablePos = 0;
+        } else if (robot.turntableSlot == 3){
+            robot.turntablePos = 0;
+        } else if (robot.turntableSlot == 4){
+            robot.turntablePos = 0;
+        } else if (robot.turntableSlot == 5){
+            robot.turntablePos = 0;
+        } else if (robot.turntableSlot == 6){
+            robot.turntablePos = 0;
+        }
+
+        robot.turntableServo.setPosition(robot.turntablePos);
+    } //processTurntable
+
+    void processKicker(){
+        if(gamepad1_dpad_down_now && !gamepad1_dpad_down_last){
+            robot.flipperUp = !robot.flipperUp;
+        }
+
+        if (robot.flipperUp) { //TODO: set flipper positions
+            robot.flipperPos = 0;
+        } else {
+            robot.flipperPos = 0;
+        }
+        robot.flipperServo.setPosition(robot.flipperPos);
     }
 } // Teleop

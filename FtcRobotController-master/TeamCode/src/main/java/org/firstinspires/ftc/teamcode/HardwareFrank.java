@@ -78,7 +78,7 @@ public class HardwareFrank
     public int positionRError;
 
     protected DcMotorEx pigChucker     = null;
-    public int          pigChuckerTarget  = 0;       // TODO: fill out hub positions
+    public int          pigChuckerTarget  = 0;       //
     public int pigChuckerPos  = 0;      //
     public double       pigChuckerVelocity  = 0.0;     //
 
@@ -89,10 +89,21 @@ public class HardwareFrank
     public Servo turntableServo   = null;
     public Servo flipperServo = null;
 
-    public double  turntablePos   = 0;
-    //public int turntableSlot = ;
-    public double  flipperPos = 0;
-    //public boolean flipperUp = false;
+
+    public double  turntablePos   = 0; //TODO: fill out with turntable slot 1 position
+    public int turntableSlot = 1;
+
+    /*
+    public double tt1 = 0;
+    public double tt2 = 0;
+    public double tt3 = 0;
+    public double tt4 = 0;
+    public double tt5 = 0 ;
+    public double tt6 = 0;
+    */
+
+    public double  flipperPos = 0; // TODO: fill out default flipper position
+    public boolean flipperUp = false;
 
     /* local OpMode members. */
     protected HardwareMap hwMap = null;
@@ -131,10 +142,10 @@ public class HardwareFrank
                  */
 
         // Define and Initialize drivetrain motors
-        frontLeftMotor  = hwMap.get(DcMotorEx.class,"leftFront");  // Expansion Hub port 1 (REVERSE)
-        frontRightMotor = hwMap.get(DcMotorEx.class,"rightFront"); // Expansion Hub port 2 (forward)
-        rearLeftMotor   = hwMap.get(DcMotorEx.class,"leftBack");   // Expansion Hub port 0 (REVERSE)
-        rearRightMotor  = hwMap.get(DcMotorEx.class,"rightBack");  // Expansion Hub port 3 (forward)
+        frontLeftMotor  = hwMap.get(DcMotorEx.class,"leftFront");  // Control Hub port 1 (REVERSE)
+        frontRightMotor = hwMap.get(DcMotorEx.class,"rightFront"); // Control Hub port 2 (forward)
+        rearLeftMotor   = hwMap.get(DcMotorEx.class,"leftBack");   // Control Hub port 0 (REVERSE)
+        rearRightMotor  = hwMap.get(DcMotorEx.class,"rightBack");  // Control Hub port 3 (forward)
 
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);  // goBilda fwd/rev opposite of Matrix motors!
         frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -162,8 +173,8 @@ public class HardwareFrank
         rearRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //Define and initialize Swyft Slide motors
-        intakeMotor= hwMap.get(DcMotorEx.class,"intakeMotor");
-        pigChucker= hwMap.get(DcMotorEx.class,"pigChucker");
+        intakeMotor= hwMap.get(DcMotorEx.class,"intakeMotor"); // Expansion Hub Motor Port 1
+        pigChucker= hwMap.get(DcMotorEx.class,"pigChucker"); // Expansion Hub Motor Port 3
 
 
         intakeMotor.setPower( 0.0 );
