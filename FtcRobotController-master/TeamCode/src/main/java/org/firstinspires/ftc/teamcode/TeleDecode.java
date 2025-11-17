@@ -167,6 +167,9 @@ public class TeleDecode extends LinearOpMode {
             telemetry.addData("Claw ", "%.3f counts", robot.clawPos );
             telemetry.addData("Diffy ", "%.3f %.3f counts", robot.diffyLPos, robot.diffyRPos );
             */
+            telemetry.addData("Kicker ", "%.3f counts", robot.flipperPos);
+            telemetry.addData("Turntable ", "%.3f counts", robot.turntablePos);
+
             telemetry.addData("CycleTime", "%.1f msec (%.1f Hz)", elapsedTime, elapsedHz );
             telemetry.addData("version","103");
             telemetry.update();
@@ -212,42 +215,9 @@ public class TeleDecode extends LinearOpMode {
     /*---------------------------------------------------------------------------------*/
     boolean processDpadDriveMode() {
         double fineControlSpeed = 0.20;
-        boolean dPadMode = true;
+        boolean dPadMode = false;
         // Only process 1 Dpad button at a time
-        if( gamepad1.dpad_up ) {
-            telemetry.addData("Dpad","FORWARD");
-            frontLeft  = fineControlSpeed;
-            frontRight = fineControlSpeed;
-            rearLeft   = fineControlSpeed;
-            rearRight  = fineControlSpeed;
-        }
-        else if( gamepad1.dpad_down ) {
-            telemetry.addData("Dpad","BACKWARD");
-            frontLeft  = -fineControlSpeed;
-            frontRight = -fineControlSpeed;
-            rearLeft   = -fineControlSpeed;
-            rearRight  = -fineControlSpeed;
-        }
-        else if( gamepad1.dpad_left ) {
-            telemetry.addData("Dpad","LEFT");
-            frontLeft  = -fineControlSpeed;
-            frontRight =  fineControlSpeed;
-            rearLeft   =  fineControlSpeed;
-            rearRight  = -fineControlSpeed;
-        }
-        else if( gamepad1.dpad_right ) {
-            telemetry.addData("Dpad","RIGHT");
-            frontLeft  =  fineControlSpeed;
-            frontRight = -fineControlSpeed;
-            rearLeft   = -fineControlSpeed;
-            rearRight  =  fineControlSpeed;
-        }
-        else {
-            dPadMode = false;
-        }
-        if( dPadMode ) {
-            robot.driveTrainMotors( frontLeft, frontRight, rearLeft, rearRight);
-        }
+
         return dPadMode;
     } // processDpadDriveMode
 
@@ -344,15 +314,15 @@ public class TeleDecode extends LinearOpMode {
 
         // Retrieve X/Y and ROTATION joystick input
         if( controlMultSegLinear ) {
-            yTranslation = multSegLinearXY( .94 * -gamepad1.left_stick_y );
-            xTranslation = multSegLinearXY(  .94 * gamepad1.left_stick_x );
-            rotation     = multSegLinearRot( 1  * -gamepad1.right_stick_x );
+            yTranslation = multSegLinearXY( .7 * -gamepad1.left_stick_y );
+            xTranslation = multSegLinearXY(  .7 * gamepad1.left_stick_x );
+            rotation     = multSegLinearRot( .6  * -gamepad1.right_stick_x );
 
         }
         else {
-            yTranslation = -gamepad1.left_stick_y * .72;
-            xTranslation =  gamepad1.left_stick_x * .72;
-            rotation     = -gamepad1.right_stick_x * 0.9;
+            yTranslation = -gamepad1.left_stick_y * .50;
+            xTranslation =  gamepad1.left_stick_x * .50;
+            rotation     = -gamepad1.right_stick_x * 0.65;
         }
 
         // Normal teleop drive control:
@@ -457,26 +427,54 @@ public class TeleDecode extends LinearOpMode {
         }
     } //encoderReset
     void processIntake(){
-        if (gamepad1.right_trigger >= 0.05) {
-            robot.intakeMotor.setPower(gamepad1.right_trigger * 1.5); //forward
-        } else if (gamepad1.left_trigger >= 0.05) {
-            robot.intakeMotor.setPower(gamepad1.left_trigger * -1.5); //reverse
+        if (gamepad1.right_trigger >= 0.03) {
+            robot.intakeMotor.setPower(gamepad1.right_trigger ); //forward
+        } else if (gamepad1.left_trigger >= 0.03) {
+            robot.intakeMotor.setPower(-gamepad1.left_trigger ) ; //reverse
+        } else {
+            robot.intakeMotor.setPower(0);
         }
     } //processIntake
 
     void processShooter(){
-        if (gamepad1_triangle_now){
-            robot.pigChucker.setPower(0.75);
+        //gamepad 1 flywheel controls
+        if (gamepad1_circle_now){
+            robot.pigChucker.setPower(0.73);
+            robot.pigSpinning = true;
         } else if (gamepad1_square_now){
-            robot.pigChucker.setPower(0.70);
-        } else if(gamepad1_circle_now){
+            robot.pigChucker.setPower(0.63);
+            robot.pigSpinning = true;
+        } else if(gamepad1_cross_now){
             robot.pigChucker.setPower(0);
+            robot.pigSpinning = false;
         }
+
+        //gamepad 2 flywheel controlls
+        if (gamepad2_circle_now){
+            robot.pigChucker.setPower(0.73);
+            robot.pigSpinning = true;
+        } else if (gamepad2_square_now){
+            robot.pigChucker.setPower(0.63);
+            robot.pigSpinning = true;
+        } else if(gamepad2_cross_now){
+            robot.pigChucker.setPower(0);
+            robot.pigSpinning = false;
+        }
+
+        //gamepad 2 rumble based on flywheel activation
+        if (robot.pigSpinning){
+            gamepad2.runRumbleEffect(shortRumble);
+        }
+
     } //processShooter
 
     void processTurntable(){
         // we are going to need 6 positions for the turntable, and they can just run sequentially
         //one for intake and one for shooting thus they will be 1i,2i,3i, and then 1s,2s,3s
+        /*
+        if (gamepad1_triangle_now){
+            robot.turntableSlot = 1;
+        }
         if(gamepad1_r_bumper_now && !gamepad1_r_bumper_last){ //right bumper to intake
             if (robot.turntableSlot >= 3){
                 robot.turntableSlot = 1;
@@ -494,11 +492,13 @@ public class TeleDecode extends LinearOpMode {
         }
 
         //process turntable pos
-        /* 1 2 3 intake, 4 5 6 shooting
-        1i = 4o
-        2i = 5o
-        3i = 6o
-        */
+        //1 2 3 intake, 4 5 6 shooting
+        //1i = 4o
+        //2i = 5o
+        //3i = 6o
+
+
+
         if(robot.turntableSlot == 1){ //TODO: fill out all turntable positions with accurate doubles
             robot.turntablePos = 0;
         } else if (robot.turntableSlot == 2){
@@ -512,20 +512,40 @@ public class TeleDecode extends LinearOpMode {
         } else if (robot.turntableSlot == 6){
             robot.turntablePos = 0;
         }
+        */
+        if (gamepad1_r_bumper_now){
+            if (robot.turntablePos < 0.96){
+                robot.turntablePos += 0.001;
+            } else {
+                gamepad1.runRumbleEffect(shortRumble);
+            }
+        } else if (gamepad1_l_bumper_now) {
+            if (robot.turntablePos > 0.04) {
+                robot.turntablePos -= 0.001;
+            } else {
+                gamepad1.runRumbleEffect(shortRumble);
+            }
+        }
+
 
         robot.turntableServo.setPosition(robot.turntablePos);
     } //processTurntable
+
 
     void processKicker(){
         if(gamepad1_dpad_down_now && !gamepad1_dpad_down_last){
             robot.flipperUp = !robot.flipperUp;
         }
 
-        if (robot.flipperUp) { //TODO: set flipper positions
-            robot.flipperPos = 0;
-        } else {
-            robot.flipperPos = 0;
+        if(robot.flipperUp){
+            robot.flipperPos = 0.600;
+        } else if (!robot.flipperUp) {
+            robot.flipperPos = 0.400;
         }
+
         robot.flipperServo.setPosition(robot.flipperPos);
     }
+
 } // Teleop
+
+

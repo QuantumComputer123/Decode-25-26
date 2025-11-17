@@ -80,6 +80,8 @@ public class HardwareFrank
     protected DcMotorEx pigChucker     = null;
     public int          pigChuckerTarget  = 0;       //
     public int pigChuckerPos  = 0;      //
+
+    public boolean pigSpinning = false;
     public double       pigChuckerVelocity  = 0.0;     //
 
     protected DcMotorEx intakeMotor     = null;
@@ -93,17 +95,9 @@ public class HardwareFrank
     public double  turntablePos   = 0; //TODO: fill out with turntable slot 1 position
     public int turntableSlot = 1;
 
-    /*
-    public double tt1 = 0;
-    public double tt2 = 0;
-    public double tt3 = 0;
-    public double tt4 = 0;
-    public double tt5 = 0 ;
-    public double tt6 = 0;
-    */
 
     public double  flipperPos = 0; // TODO: fill out default flipper position
-    public boolean flipperUp = false;
+    public boolean flipperUp = true;
 
     /* local OpMode members. */
     protected HardwareMap hwMap = null;
@@ -150,7 +144,7 @@ public class HardwareFrank
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);  // goBilda fwd/rev opposite of Matrix motors!
         frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
         rearLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        rearRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        rearRightMotor.setDirection(DcMotor.Direction.REVERSE);
 
         // Set all drivetrain motors to zero power
         driveTrainMotorsZero();
@@ -196,8 +190,8 @@ public class HardwareFrank
 
     /*--------------------------------------------------------------------------------------------*/
     public void resetEncoders() { //TODO: Set init values
-        turntablePos   = 0.855;     turntableServo.setPosition(turntablePos); //set init value
-       flipperPos = 0.114;    flipperServo.setPosition(flipperPos);
+        turntablePos   = 0.500;     turntableServo.setPosition(turntablePos); //set init value
+       flipperPos = 0.600;    flipperServo.setPosition(flipperPos);
 
        pigChucker.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
        pigChucker.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
