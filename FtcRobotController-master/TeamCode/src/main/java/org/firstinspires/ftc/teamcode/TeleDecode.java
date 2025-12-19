@@ -513,18 +513,47 @@ public class TeleDecode extends LinearOpMode {
             robot.turntablePos = 0;
         }
         */
-        if (gamepad1_r_bumper_now){
+        /*
+        if (gamepad2_r_bumper_now){
             if (robot.turntablePos < 0.96){
                 robot.turntablePos += 0.001;
             } else {
-                gamepad1.runRumbleEffect(shortRumble);
+                gamepad2.runRumbleEffect(shortRumble);
             }
-        } else if (gamepad1_l_bumper_now) {
-            if (robot.turntablePos > 0.034) {
+        } else if (gamepad2_l_bumper_now) {
+            if (robot.turntablePos > 0.08) {
                 robot.turntablePos -= 0.001;
             } else {
-                gamepad1.runRumbleEffect(shortRumble);
+                gamepad2.runRumbleEffect(shortRumble);
             }
+        }
+        */
+        if (gamepad2_r_bumper_now && !gamepad2_r_bumper_last){
+            if (robot.turntableSlot < 6){
+                robot.turntableSlot += 1;
+            } else {
+                gamepad2_runRumbleEffect(shortRumble);
+            }
+        } else if (gamepad2_l_bumper_now && !gamepad2_l_bumper_last){
+            if (robot.turntableSlot > 1{
+                robot.turntableSlot -= 1;
+            } else {
+                gamepad2.runRumbleEffect(shortRumble);
+            }
+        }
+
+        if(robot.turntableSlot == 1){ //TODO: fill out all turntable positions with accurate doubles
+            robot.turntablePos = .04;
+        } else if (robot.turntableSlot == 2){
+            robot.turntablePos = 0.1;
+        } else if (robot.turntableSlot == 3){
+            robot.turntablePos = 0.2;
+        } else if (robot.turntableSlot == 4){
+            robot.turntablePos = 0.3;
+        } else if (robot.turntableSlot == 5){
+            robot.turntablePos = 0.4;
+        } else if (robot.turntableSlot == 6){
+            robot.turntablePos = .96;
         }
 
 
