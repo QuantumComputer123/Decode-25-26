@@ -169,7 +169,7 @@ public class TeleDecode extends LinearOpMode {
             */
             telemetry.addData("Kicker ", "%.3f counts", robot.flipperPos);
             telemetry.addData("Turntable ", "%.3f counts", robot.turntablePos);
-
+            
             telemetry.addData("CycleTime", "%.1f msec (%.1f Hz)", elapsedTime, elapsedHz );
             telemetry.addData("version","103");
             telemetry.update();
@@ -427,10 +427,10 @@ public class TeleDecode extends LinearOpMode {
         }
     } //encoderReset
     void processIntake(){
-        if (gamepad1.right_trigger >= 0.03) {
-            robot.intakeMotor.setPower(gamepad1.right_trigger ); //forward
-        } else if (gamepad1.left_trigger >= 0.03) {
-            robot.intakeMotor.setPower(-gamepad1.left_trigger ) ; //reverse
+        if (gamepad2.right_trigger >= 0.03) {
+            robot.intakeMotor.setPower(gamepad2.right_trigger ); //forward
+        } else if (gamepad2.left_trigger >= 0.03) {
+            robot.intakeMotor.setPower(-gamepad2.left_trigger ) ; //reverse
         } else {
             robot.intakeMotor.setPower(0);
         }
@@ -471,17 +471,17 @@ public class TeleDecode extends LinearOpMode {
     void processTurntable(){
         // we are going to need 6 positions for the turntable, and they can just run sequentially
         //one for intake and one for shooting thus they will be 1i,2i,3i, and then 1s,2s,3s
-        /*
-        if (gamepad1_triangle_now){
+
+        if (gamepad2_triangle_now){
             robot.turntableSlot = 1;
         }
-        if(gamepad1_r_bumper_now && !gamepad1_r_bumper_last){ //right bumper to intake
+        if(gamepad2_r_bumper_now && !gamepad2_r_bumper_last){ //right bumper to intake
             if (robot.turntableSlot >= 3){
                 robot.turntableSlot = 1;
             } else {
                 robot.turntableSlot += 1;
             }
-        } else if (gamepad1_l_bumper_now && !gamepad1_l_bumper_last){ //control shooting turntable with left bumper
+        } else if (gamepad2_l_bumper_now && !gamepad2_l_bumper_last){ //control shooting turntable with left bumper
             if (robot.turntableSlot <= 3) {
                 robot.turntableSlot = 4;
             } else if (robot.turntableSlot <= 5) {
@@ -500,76 +500,49 @@ public class TeleDecode extends LinearOpMode {
 
 
         if(robot.turntableSlot == 1){ //TODO: fill out all turntable positions with accurate doubles
-            robot.turntablePos = 0;
+            robot.turntablePos = 0.016;
         } else if (robot.turntableSlot == 2){
-            robot.turntablePos = 0;
+            robot.turntablePos = 0.060;
         } else if (robot.turntableSlot == 3){
-            robot.turntablePos = 0;
+            robot.turntablePos = 0.107;
         } else if (robot.turntableSlot == 4){
-            robot.turntablePos = 0;
+            robot.turntablePos = 0.090;
         } else if (robot.turntableSlot == 5){
-            robot.turntablePos = 0;
+            robot.turntablePos = 0.131;
         } else if (robot.turntableSlot == 6){
-            robot.turntablePos = 0;
+            robot.turntablePos = 0.179;
         }
-        */
+
+
         /*
         if (gamepad2_r_bumper_now){
-            if (robot.turntablePos < 0.96){
+            if (robot.turntablePos < 0.99){
                 robot.turntablePos += 0.001;
             } else {
                 gamepad2.runRumbleEffect(shortRumble);
             }
         } else if (gamepad2_l_bumper_now) {
-            if (robot.turntablePos > 0.08) {
+            if (robot.turntablePos > 0.01) {
                 robot.turntablePos -= 0.001;
             } else {
                 gamepad2.runRumbleEffect(shortRumble);
             }
         }
         */
-        if (gamepad2_r_bumper_now && !gamepad2_r_bumper_last){
-            if (robot.turntableSlot < 6){
-                robot.turntableSlot += 1;
-            } else {
-                gamepad2_runRumbleEffect(shortRumble);
-            }
-        } else if (gamepad2_l_bumper_now && !gamepad2_l_bumper_last){
-            if (robot.turntableSlot > 1{
-                robot.turntableSlot -= 1;
-            } else {
-                gamepad2.runRumbleEffect(shortRumble);
-            }
-        }
-
-        if(robot.turntableSlot == 1){ //TODO: fill out all turntable positions with accurate doubles
-            robot.turntablePos = .04;
-        } else if (robot.turntableSlot == 2){
-            robot.turntablePos = 0.1;
-        } else if (robot.turntableSlot == 3){
-            robot.turntablePos = 0.2;
-        } else if (robot.turntableSlot == 4){
-            robot.turntablePos = 0.3;
-        } else if (robot.turntableSlot == 5){
-            robot.turntablePos = 0.4;
-        } else if (robot.turntableSlot == 6){
-            robot.turntablePos = .96;
-        }
-
 
         robot.turntableServo.setPosition(robot.turntablePos);
     } //processTurntable
 
 
     void processKicker(){
-        if(gamepad1_dpad_down_now && !gamepad1_dpad_down_last){
+        if(gamepad2_dpad_down_now && !gamepad2_dpad_down_last){
             robot.flipperUp = !robot.flipperUp;
         }
 
         if(robot.flipperUp){
-            robot.flipperPos = 0.600;
+            robot.flipperPos = 1;
         } else if (!robot.flipperUp) {
-            robot.flipperPos = 0.400;
+            robot.flipperPos = 0.350;
         }
 
         robot.flipperServo.setPosition(robot.flipperPos);

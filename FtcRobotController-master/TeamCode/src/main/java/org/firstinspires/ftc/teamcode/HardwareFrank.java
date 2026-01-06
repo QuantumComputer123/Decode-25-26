@@ -141,9 +141,9 @@ public class HardwareFrank
         rearLeftMotor   = hwMap.get(DcMotorEx.class,"leftBack");   // Control Hub port 0 (REVERSE)
         rearRightMotor  = hwMap.get(DcMotorEx.class,"rightBack");  // Control Hub port 3 (forward)
 
-        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);  // goBilda fwd/rev opposite of Matrix motors!
-        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
-        rearLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);  // goBilda fwd/rev opposite of Matrix motors!
+        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        rearLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         rearRightMotor.setDirection(DcMotor.Direction.REVERSE);
 
         // Set all drivetrain motors to zero power
@@ -183,7 +183,7 @@ public class HardwareFrank
         pigChucker.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Initialize robot hardware (autonomous=true initializes servos)
-        turntableServo   = hwMap.get(Servo.class,"turntable");            // servo port 0 (Expansion Hub)
+        turntableServo   = hwMap.get(Servo.class,"turntable");// servo port 0 (Expansion Hub)
         flipperServo = hwMap.get(Servo.class,"flipper");          // servo port 1 (Expansion Hub)
 
     } /* init */
