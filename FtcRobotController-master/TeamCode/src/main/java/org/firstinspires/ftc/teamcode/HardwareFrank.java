@@ -33,7 +33,7 @@ public class HardwareFrank
     protected BNO055IMU imu    = null;
     public double headingAngle = 0.0;
     public double tiltAngle    = 0.0;
-    //protected GoBildaPinpointDriver odom = null;
+    protected GoBildaPinpointDriver odom = null;
 
     //====== MECANUM DRIVETRAIN MOTORS (RUN_USING_ENCODER) =====
     protected DcMotorEx frontLeftMotor     = null;
@@ -124,16 +124,16 @@ public class HardwareFrank
 
         //====== GOBILDA PINPOINT ODOMETRY COMPUTER ======
         // Locate the odometry controller in our hardware settings
-        /*
+
         odom = hwMap.get(GoBildaPinpointDriver.class,"odom"); //Control Hub I2C port 3
-        odom.setOffsets(111.23, 36.73);   // odometry pod x,y locations [mm] relative to center of robot
+        odom.setOffsets(-12.17, 103);   // odometry pod x,y locations [mm] relative to center of robot
         odom.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD ); // 4bar pods
         odom.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD,
                                   GoBildaPinpointDriver.EncoderDirection.FORWARD);
         if( isAutonomous ) {
             odom.resetPosAndIMU();
         }
-                 */
+
 
         // Define and Initialize drivetrain motors
         frontLeftMotor  = hwMap.get(DcMotorEx.class,"leftFront");  // Control Hub port 1 (REVERSE)
@@ -192,6 +192,8 @@ public class HardwareFrank
     public void resetEncoders() { //TODO: Set init values
         turntablePos   = 0.500;     turntableServo.setPosition(turntablePos); //set init value
        flipperPos = 0.600;    flipperServo.setPosition(flipperPos);
+
+
 
        pigChucker.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
        pigChucker.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

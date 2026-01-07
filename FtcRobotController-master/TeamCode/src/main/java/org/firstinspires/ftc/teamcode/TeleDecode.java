@@ -167,6 +167,8 @@ public class TeleDecode extends LinearOpMode {
             telemetry.addData("Claw ", "%.3f counts", robot.clawPos );
             telemetry.addData("Diffy ", "%.3f %.3f counts", robot.diffyLPos, robot.diffyRPos );
             */
+            telemetry.addData("Shooter ", "%.3f speed", robot.pigChucker.getPower());
+
             telemetry.addData("Kicker ", "%.3f counts", robot.flipperPos);
             telemetry.addData("Turntable ", "%.3f counts", robot.turntablePos);
             
@@ -439,10 +441,10 @@ public class TeleDecode extends LinearOpMode {
     void processShooter(){
         //gamepad 1 flywheel controls
         if (gamepad1_circle_now){
-            robot.pigChucker.setPower(0.73);
+            robot.pigChucker.setPower(0.63);
             robot.pigSpinning = true;
         } else if (gamepad1_square_now){
-            robot.pigChucker.setPower(0.63);
+            robot.pigChucker.setPower(0.3);
             robot.pigSpinning = true;
         } else if(gamepad1_cross_now){
             robot.pigChucker.setPower(0);
@@ -451,10 +453,10 @@ public class TeleDecode extends LinearOpMode {
 
         //gamepad 2 flywheel controlls
         if (gamepad2_circle_now){
-            robot.pigChucker.setPower(0.73);
+            robot.pigChucker.setPower(0.63);
             robot.pigSpinning = true;
         } else if (gamepad2_square_now){
-            robot.pigChucker.setPower(0.63);
+            robot.pigChucker.setPower(0.3);
             robot.pigSpinning = true;
         } else if(gamepad2_cross_now){
             robot.pigChucker.setPower(0);
@@ -500,17 +502,17 @@ public class TeleDecode extends LinearOpMode {
 
 
         if(robot.turntableSlot == 1){ //TODO: fill out all turntable positions with accurate doubles
-            robot.turntablePos = 0.016;
+            robot.turntablePos = 0.031;
         } else if (robot.turntableSlot == 2){
-            robot.turntablePos = 0.060;
+            robot.turntablePos = 0.085;
         } else if (robot.turntableSlot == 3){
-            robot.turntablePos = 0.107;
+            robot.turntablePos = 0.133;
         } else if (robot.turntableSlot == 4){
-            robot.turntablePos = 0.090;
+            robot.turntablePos = 0.050;
         } else if (robot.turntableSlot == 5){
-            robot.turntablePos = 0.131;
+            robot.turntablePos = 0.100;
         } else if (robot.turntableSlot == 6){
-            robot.turntablePos = 0.179;
+            robot.turntablePos = 0.150;
         }
 
 
@@ -540,7 +542,7 @@ public class TeleDecode extends LinearOpMode {
         }
 
         if(robot.flipperUp){
-            robot.flipperPos = 1;
+            robot.flipperPos = .76;
         } else if (!robot.flipperUp) {
             robot.flipperPos = 0.350;
         }
